@@ -25,10 +25,9 @@
  */
 package com.bewsoftware.tafe.java3.at2.q1;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * This class stores information about a country.
@@ -45,7 +44,7 @@ public class Country implements Comparable<Country> {
     /**
      * Storage for the cities
      */
-    private final List<City> cities = new ArrayList<>();
+    private final SortedSet<City> cities = new TreeSet<>();
 
     /**
      * The country's name
@@ -58,14 +57,23 @@ public class Country implements Comparable<Country> {
      * @param name of country
      */
     public Country(final String name) {
-        this.name = name;
+        this.name = Objects.requireNonNull(name, "The country's name must not be null!");
+    }
+
+    /**
+     * Stores the new city.
+     *
+     * @param city name
+     *
+     * @return {@code true } if successful, {@code false } otherwise
+     */
+    public boolean addCity(final String city) {
+        return cities.add(new City(Objects.requireNonNull(city, "City's name must not be null!")));
     }
 
     @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 47 * hash + Objects.hashCode(this.name);
-        return hash;
+    public int compareTo(Country o) {
+        return name.compareTo(o.name);
     }
 
     @Override
@@ -86,9 +94,38 @@ public class Country implements Comparable<Country> {
         return Objects.equals(this.name, other.name);
     }
 
+    /**
+     * Get sorted array of the cities in this country.
+     *
+     * @return array of cities
+     */
+    public City[] getCities() {
+        return cities.toArray(new City[cities.size()]);
+    }
+
+    /**
+     * Get the country's name.
+     *
+     * @return name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Get number of cities in this country.
+     *
+     * @return number of cities
+     */
+    public int getNumberOfCities() {
+        return cities.size();
+    }
+
     @Override
-    public int compareTo(Country o) {
-        return name.compareTo(o.name);
+    public int hashCode() {
+        int hash = 7;
+        hash = 47 * hash + Objects.hashCode(this.name);
+        return hash;
     }
 
     /**
@@ -100,37 +137,6 @@ public class Country implements Comparable<Country> {
         return cities.size();
     }
 
-    /**
-     * Get country name.
-     *
-     * @return name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Stores the new city.
-     *
-     * @param name of city
-     *
-     * @return {@code true } if successful
-     */
-    public boolean add(final String name) {
-        return cities.add(new City(Objects.requireNonNull(name, "name must not be null")));
-    }
-
-    /**
-     * Get sorted list of cities in this country.
-     *
-     * @return array of cities
-     */
-    public City[] getCities() {
-        City[] arrCities = cities.toArray(new City[cities.size()]);
-        Arrays.sort(arrCities);
-        return arrCities;
-    }
-
     @Override
     public String toString() {
         return "Country{ name = " + name + "\ncities = " + cities + '}';
@@ -139,12 +145,17 @@ public class Country implements Comparable<Country> {
     /**
      * Holds data about a single city.
      */
-    public class City {
+    public class City implements Comparable<City> {
 
         /**
          * The city's name.
          */
         private final String name;
+
+        /**
+         * The population of the city.
+         */
+        private int population;
 
         /**
          * Instantiate a new City.
@@ -153,6 +164,63 @@ public class Country implements Comparable<Country> {
          */
         public City(final String name) {
             this.name = name;
+        }
+
+        @Override
+        public int compareTo(City o) {
+            return name.compareTo(Objects.requireNonNull(o, "Can't compare with a null City object").getName());
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+            {
+                return true;
+            }
+            if (obj == null)
+            {
+                return false;
+            }
+            if (getClass() != obj.getClass())
+            {
+                return false;
+            }
+            final City other = (City) obj;
+            return Objects.equals(this.name, other.name);
+        }
+
+        /**
+         * Get the name.
+         *
+         * @return the name
+         */
+        public String getName() {
+            return name;
+        }
+
+        /**
+         * Get the population.
+         *
+         * @return the population
+         */
+        public int getPopulation() {
+            return population;
+        }
+
+        /**
+         * Set the population to value.
+         *
+         * @param value to set
+         */
+        public void setPopulation(final int value) {
+            population = value;
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 3;
+            hash = 47 * hash + Objects.hashCode(this.name);
+            return hash;
         }
 
         @Override

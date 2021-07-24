@@ -32,8 +32,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
+ * Tests the {@linkplain LinkedList } class.
  *
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
+ *
+ * @since 1.0
+ * @version 1.0
  */
 public class LinkedListTest {
 
@@ -48,19 +52,30 @@ public class LinkedListTest {
 
     /**
      * Globally accessible linked list.
+     * <p>
+     * Duplicates allowed.
      */
     private static LinkedList<String> linkedList;
 
+    /**
+     * Globally accessible linked list.
+     * <p>
+     * Duplicates NOT allowed.
+     */
+    private static LinkedList<String> linkedList2;
+
     @BeforeAll
     public static void setUpClass() {
-        // Instantiate linked list
+        // Instantiate linked lists
         linkedList = new LinkedList<>();
+        linkedList2 = new LinkedList<>(false);
     }
 
     @AfterAll
     public static void tearDownClass() {
         // just something to do
         linkedList.clear();
+        linkedList2.clear();
     }
 
     public LinkedListTest() {
@@ -72,11 +87,17 @@ public class LinkedListTest {
         {
             linkedList.append(NAMES[i]);
         }
+
+        for (int i = 0; i < 4; i++)
+        {
+            linkedList2.append(NAMES[i]);
+        }
     }
 
     @AfterEach
     public void tearDown() {
         linkedList.clear();
+        linkedList2.clear();
     }
 
     /**
@@ -88,7 +109,31 @@ public class LinkedListTest {
 
         linkedList.append(NAMES[5]);
         assertEquals(count + 1, linkedList.size(),
-                     "Internal count is wrong: " + count + 1 + " ~ " + linkedList.size());
+                     "linkedList - Internal count is wrong: " + count + 1 + " ~ " + linkedList.size());
+
+        count = linkedList2.size();
+
+        linkedList2.append(NAMES[5]);
+        assertEquals(count + 1, linkedList2.size(),
+                     "linkedList2 - Internal count is wrong: " + count + 1 + " ~ " + linkedList2.size());
+    }
+
+    /**
+     * Test of append method, of class LinkedList.
+     */
+    @Test
+    public void testAppendDuplicate() {
+        int count = linkedList.size();
+
+        linkedList.append(NAMES[1]);
+        assertEquals(count + 1, linkedList.size(),
+                     "linkedList - Internal count is wrong: " + count + 1 + " ~ " + linkedList.size());
+
+        count = linkedList2.size();
+
+        linkedList2.append(NAMES[1]);
+        assertEquals(count, linkedList2.size(),
+                     "linkedList2 - Internal count is wrong: " + count + " ~ " + linkedList2.size());
     }
 
     /**
@@ -98,7 +143,11 @@ public class LinkedListTest {
     public void testClear() {
         linkedList.clear();
         assertEquals(0, linkedList.size(),
-                     "Internal count is wrong: 0 ~ " + linkedList.size());
+                     "linkedList - Internal count is wrong: 0 ~ " + linkedList.size());
+
+        linkedList.clear();
+        assertEquals(0, linkedList.size(),
+                     "linkedList2 - Internal count is wrong: 0 ~ " + linkedList.size());
     }
 
     /**
@@ -106,7 +155,24 @@ public class LinkedListTest {
      */
     @Test
     public void testContains() {
-        assertTrue(linkedList.contains(NAMES[2]), "Can't find NAMES[2]");
+        assertTrue(linkedList.contains(NAMES[2]), "linkedList - Can't find NAMES[2]");
+        assertTrue(linkedList2.contains(NAMES[2]), "linkedList2 - Can't find NAMES[2]");
+    }
+
+    /**
+     * Test of size method, of class LinkedList.
+     */
+    @Test
+    public void testDuplicateSize() {
+        int count = linkedList.size();
+        linkedList.append(NAMES[1]);
+        assertEquals(count + 1, linkedList.size(),
+                     "linkedList - Internal count is wrong: " + (count + 1) + " ~ " + linkedList.size());
+
+        count = linkedList2.size();
+        linkedList2.append(NAMES[1]);
+        assertEquals(count, linkedList2.size(),
+                     "linkedList2 - Internal count is wrong: " + count + " ~ " + linkedList2.size());
     }
 
     /**
@@ -114,7 +180,8 @@ public class LinkedListTest {
      */
     @Test
     public void testFirst() {
-        assertNotNull(linkedList.first(), "No first item returned");
+        assertNotNull(linkedList.first(), "linkedList - No first item returned");
+        assertNotNull(linkedList2.first(), "linkedList2 - No first item returned");
     }
 
     /**
@@ -123,7 +190,10 @@ public class LinkedListTest {
     @Test
     public void testHasNext() {
         linkedList.first();
-        assertTrue(linkedList.hasNext(), "hasNext() failed");
+        assertTrue(linkedList.hasNext(), "linkedList - hasNext() failed");
+
+        linkedList2.first();
+        assertTrue(linkedList2.hasNext(), "linkedList2 - hasNext() failed");
     }
 
     /**
@@ -135,7 +205,13 @@ public class LinkedListTest {
         linkedList.contains(NAMES[3]);
         linkedList.insert(NAMES[6]);
         assertEquals(count + 1, linkedList.size(),
-                     "Internal count is wrong: " + count + 1 + " ~ " + linkedList.size());
+                     "linkedList - Internal count is wrong: " + count + 1 + " ~ " + linkedList.size());
+
+        count = linkedList2.size();
+        linkedList2.contains(NAMES[3]);
+        linkedList2.insert(NAMES[6]);
+        assertEquals(count + 1, linkedList2.size(),
+                     "linkedList2 - Internal count is wrong: " + count + 1 + " ~ " + linkedList2.size());
     }
 
     /**
@@ -147,7 +223,49 @@ public class LinkedListTest {
         linkedList.contains(NAMES[2]);
         linkedList.insertAfter(NAMES[4]);
         assertEquals(count + 1, linkedList.size(),
-                     "Internal count is wrong: " + count + 1 + " ~ " + linkedList.size());
+                     "linkedList - Internal count is wrong: " + count + 1 + " ~ " + linkedList.size());
+
+        count = linkedList2.size();
+        linkedList2.contains(NAMES[2]);
+        linkedList2.insertAfter(NAMES[4]);
+        assertEquals(count + 1, linkedList2.size(),
+                     "linkedList2 - Internal count is wrong: " + count + 1 + " ~ " + linkedList2.size());
+    }
+
+    /**
+     * Test of insert method, of class LinkedList.
+     */
+    @Test
+    public void testInsertDuplicate() {
+        int count = linkedList.size();
+        linkedList.contains(NAMES[3]);
+        linkedList.insert(NAMES[2]);
+        assertEquals(count + 1, linkedList.size(),
+                     "linkedList - Internal count is wrong: " + count + 1 + " ~ " + linkedList.size());
+
+        count = linkedList2.size();
+        linkedList2.contains(NAMES[3]);
+        linkedList2.insert(NAMES[2]);
+        assertEquals(count, linkedList2.size(),
+                     "linkedList2 - Internal count is wrong: " + count + " ~ " + linkedList2.size());
+    }
+
+    /**
+     * Test of insertAfter method, of class LinkedList.
+     */
+    @Test
+    public void testInsertDuplicateAfter() {
+        int count = linkedList.size();
+        linkedList.contains(NAMES[2]);
+        linkedList.insertAfter(NAMES[1]);
+        assertEquals(count + 1, linkedList.size(),
+                     "linkedList - Internal count is wrong: " + count + 1 + " ~ " + linkedList.size());
+
+        count = linkedList2.size();
+        linkedList2.contains(NAMES[2]);
+        linkedList2.insertAfter(NAMES[1]);
+        assertEquals(count, linkedList2.size(),
+                     "linkedList2 - Internal count is wrong: " + count + " ~ " + linkedList2.size());
     }
 
     /**
@@ -155,7 +273,8 @@ public class LinkedListTest {
      */
     @Test
     public void testLast() {
-        assertNotNull(linkedList.last(), "last should not be null");
+        assertNotNull(linkedList.last(), "linkedList - last should not be null");
+        assertNotNull(linkedList2.last(), "linkedList2 - last should not be null");
     }
 
     /**
@@ -164,7 +283,10 @@ public class LinkedListTest {
     @Test
     public void testNext_0args() {
         linkedList.first();
-        assertNotNull(linkedList.next(), "No String returned");
+        assertNotNull(linkedList.next(), "linkedList - No String returned");
+
+        linkedList2.first();
+        assertNotNull(linkedList2.next(), "linkedList2 - No String returned");
     }
 
     /**
@@ -174,7 +296,11 @@ public class LinkedListTest {
     public void testNext_GenericType() {
         linkedList.append(NAMES[1]);
         linkedList.contains(NAMES[1]);
-        assertTrue(linkedList.next(NAMES[1]), "Couldn't find second record");
+        assertTrue(linkedList.next(NAMES[1]), "linkedList - Couldn't find second record");
+
+        linkedList2.append(NAMES[1]);
+        linkedList2.contains(NAMES[1]);
+        assertTrue(linkedList2.next(NAMES[1]), "linkedList2 - Couldn't find second record");
     }
 
     /**
@@ -183,9 +309,12 @@ public class LinkedListTest {
     @Test
     public void testPop() {
         String value = linkedList.pop();
-
         assertNotNull(value, "pop() return null");
-        assertTrue(value.compareTo(NAMES[0]) == 0, "Returned wrong string");
+        assertTrue(value.compareTo(NAMES[0]) == 0, "linkedList - Returned wrong string");
+
+        value = linkedList2.pop();
+        assertNotNull(value, "pop() return null");
+        assertTrue(value.compareTo(NAMES[0]) == 0, "linkedList2 - Returned wrong string");
     }
 
     /**
@@ -194,7 +323,10 @@ public class LinkedListTest {
     @Test
     public void testPrev() {
         linkedList.last();
-        assertNotNull(linkedList.prev(), "prev() returned null");
+        assertNotNull(linkedList.prev(), "linkedList - prev() returned null");
+
+        linkedList2.last();
+        assertNotNull(linkedList2.prev(), "linkedList2 - prev() returned null");
     }
 
     /**
@@ -202,7 +334,8 @@ public class LinkedListTest {
      */
     @Test
     public void testPull() {
-        assertNotNull(linkedList.pull(), "pull() returned null");
+        assertNotNull(linkedList.pull(), "linkedList - pull() returned null");
+        assertNotNull(linkedList2.pull(), "linkedList2 - pull() returned null");
     }
 
     /**
@@ -213,7 +346,28 @@ public class LinkedListTest {
         int count = linkedList.size();
         linkedList.push(NAMES[4]);
         assertEquals(count + 1, linkedList.size(),
-                     "Internal count is wrong: " + count + 1 + " ~ " + linkedList.size());
+                     "linkedList - Internal count is wrong: " + (count + 1) + " ~ " + linkedList.size());
+
+        count = linkedList2.size();
+        linkedList2.push(NAMES[4]);
+        assertEquals(count + 1, linkedList2.size(),
+                     "linkedList2 - Internal count is wrong: " + (count + 1) + " ~ " + linkedList2.size());
+    }
+
+    /**
+     * Test of push method, of class LinkedList.
+     */
+    @Test
+    public void testPushDuplicate() {
+        int count = linkedList.size();
+        linkedList.push(NAMES[0]);
+        assertEquals(count + 1, linkedList.size(),
+                     "linkedList - Internal count is wrong: " + (count + 1) + " ~ " + linkedList.size());
+
+        count = linkedList2.size();
+        linkedList2.push(NAMES[0]);
+        assertEquals(count, linkedList2.size(),
+                     "linkedList2 - Internal count is wrong: " + count + " ~ " + linkedList2.size());
     }
 
     /**
@@ -224,9 +378,38 @@ public class LinkedListTest {
         int count = linkedList.size();
         linkedList.contains(NAMES[2]);
         String item = linkedList.remove();
-        assertNotNull(item, "remove returned null");
+        assertNotNull(item, "linkedList - remove returned null");
         assertEquals(count - 1, linkedList.size(),
-                     "Internal count is wrong: " + count + 1 + " ~ " + linkedList.size());
+                     "linkedList - Internal count is wrong: " + (count - 1) + " ~ " + linkedList.size());
+
+        count = linkedList2.size();
+        linkedList2.contains(NAMES[2]);
+        item = linkedList2.remove();
+        assertNotNull(item, "linkedList2 - remove returned null");
+        assertEquals(count - 1, linkedList2.size(),
+                     "linkedList2 - Internal count is wrong: " + (count - 1) + " ~ " + linkedList2.size());
+    }
+
+    /**
+     * Test of remove method, of class LinkedList.
+     */
+    @Test
+    public void testRemoveWithDuplicate() {
+        int count = linkedList.size();
+        linkedList.append(NAMES[2]);
+        linkedList.contains(NAMES[2]);
+        String item = linkedList.remove();
+        assertNotNull(item, "linkedList - remove returned null");
+        assertEquals(count, linkedList.size(),
+                     "linkedList - Internal count is wrong: " + count + " ~ " + linkedList.size());
+
+        count = linkedList2.size();
+        linkedList2.append(NAMES[2]);
+        linkedList2.contains(NAMES[2]);
+        item = linkedList2.remove();
+        assertNotNull(item, "linkedList2 - remove returned null");
+        assertEquals(count - 1, linkedList2.size(),
+                     "linkedList2 - Internal count is wrong: " + (count - 1) + " ~ " + linkedList2.size());
     }
 
     /**
@@ -236,7 +419,13 @@ public class LinkedListTest {
     public void testSize() {
         int count = linkedList.size();
         linkedList.append(NAMES[7]);
-        assertEquals(count + 1, linkedList.size());
+        assertEquals(count + 1, linkedList.size(),
+                     "linkedList - Internal count is wrong: " + (count + 1) + " ~ " + linkedList.size());
+
+        count = linkedList2.size();
+        linkedList2.append(NAMES[7]);
+        assertEquals(count + 1, linkedList2.size(),
+                     "linkedList2 - Internal count is wrong: " + (count + 1) + " ~ " + linkedList2.size());
     }
 
     /**
@@ -244,6 +433,7 @@ public class LinkedListTest {
      */
     @Test
     public void testToString() {
-        assertTrue(linkedList.toString().length() > 0, "toString failed");
+        assertTrue(linkedList.toString().length() > 0, "linkedList - toString failed");
+        assertTrue(linkedList2.toString().length() > 0, "linkedList2 - toString failed");
     }
 }

@@ -23,7 +23,7 @@
         <project.reporting.outputEncoding>${source.encoding}</project.reporting.outputEncoding>
         <javadoc.link.url.jdk>https://docs.oracle.com/en/java/javase/${java.version}/docs/api/</javadoc.link.url.jdk>
         <javadoc.reporting.outputDirectory>${project.reporting.outputDirectory}/apidocs</javadoc.reporting.outputDirectory>
-        <skip.unit.tests>false</skip.unit.tests>
+        <skip.unit.tests>true</skip.unit.tests>
     </properties>
     
     

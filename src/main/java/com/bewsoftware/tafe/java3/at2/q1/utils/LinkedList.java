@@ -30,7 +30,13 @@ import java.util.Objects;
 /**
  * This is an implementation of a Doubly Linked List.
  * <p>
- * <b>Note:</b> <i>This implementation does not allow {@code null } items to be added.</i>
+ * <b>Note:</b>
+ * <ul>
+ * <li><i>This implementation does not allow {@code null } items to be added.</i></li>
+ * <li>By default, this implementation allows duplicate items to be added.<br>
+ * However, it is possible to change that at instantiation - see: {@linkplain #LinkedList(boolean) }.</li>
+ * </ul>
+ *
  *
  * @param <E> the type of elements held in this list
  *
@@ -45,6 +51,13 @@ public class LinkedList<E extends Comparable<E>> {
      * Error message to go with {@link NullPointerException}
      */
     private static final String NO_NULL = "This implementation does not allow {@code null} items to be added.";
+
+    /**
+     * Are duplicate items allowed in this instance of {@linkplain LinkedList }?
+     * <p>
+     * @note Once set at instantiation, it cannot be changed.
+     */
+    public final boolean allowDuplicates;
 
     /**
      * The node that was last retrieved by one of the traversal methods.
@@ -68,9 +81,20 @@ public class LinkedList<E extends Comparable<E>> {
 
     /**
      * Instantiate an empty default list object.
+     * <p>
+     * Duplicates are allowed.
      */
     public LinkedList() {
-        // Intensionally empty.
+        allowDuplicates = true;
+    }
+
+    /**
+     * Instantiate an empty list object.
+     *
+     * @param allowDuplicates Allow duplicates?
+     */
+    public LinkedList(final boolean allowDuplicates) {
+        this.allowDuplicates = allowDuplicates;
     }
 
     /**
@@ -84,7 +108,7 @@ public class LinkedList<E extends Comparable<E>> {
      *
      * @throws NullPointerException if item is {@code null}
      */
-    public void append(E item) {
+    public void append(final E item) {
         Node<E> node = new Node<>(Objects.requireNonNull(item, NO_NULL));
 
         // Is the list empty?
@@ -96,7 +120,13 @@ public class LinkedList<E extends Comparable<E>> {
             current = node;
         } else
         {
-            // No - add node to tail of chain
+            // Check for disallowed duplicates
+            if (foundDisallowedDuplicate(item))
+            {
+                return;
+            }
+
+            // Add node to tail of chain
             node.previous = last;
             last.next = node;
             last = node;
@@ -127,7 +157,7 @@ public class LinkedList<E extends Comparable<E>> {
      *
      * @throws NullPointerException if item is {@code null}
      */
-    public boolean contains(E item) {
+    public boolean contains(final E item) {
         Objects.requireNonNull(item, NO_NULL);
 
         boolean rtn = false;
@@ -183,7 +213,7 @@ public class LinkedList<E extends Comparable<E>> {
      *
      * @throws NullPointerException if item is {@code null}
      */
-    public void insert(E item) {
+    public void insert(final E item) {
 
         // Are we out of bounds or pointing at the top?
         if (current == null || current.previous == null)
@@ -194,6 +224,13 @@ public class LinkedList<E extends Comparable<E>> {
         { // No - so we insert it before the current node
             Node<E> node = new Node<>(Objects.requireNonNull(item, NO_NULL));
 
+            // Check for disallowed duplicates
+            if (foundDisallowedDuplicate(item))
+            {
+                return;
+            }
+
+            // Add node
             // point node to previous node
             node.previous = current.previous;
             // point current node to node
@@ -220,7 +257,7 @@ public class LinkedList<E extends Comparable<E>> {
      *
      * @throws NullPointerException if item is {@code null}
      */
-    public void insertAfter(E item) {
+    public void insertAfter(final E item) {
 
         // Are we out of bounds or pointing at the top?
         if (current == null || current.next == null)
@@ -231,6 +268,13 @@ public class LinkedList<E extends Comparable<E>> {
         { // No - so we insert it before the current node
             Node<E> node = new Node<>(Objects.requireNonNull(item, NO_NULL));
 
+            // Check for disallowed duplicates
+            if (foundDisallowedDuplicate(item))
+            {
+                return;
+            }
+
+            // Add node
             // point node to next node
             node.next = current.next;
             // point current node to node
@@ -272,7 +316,7 @@ public class LinkedList<E extends Comparable<E>> {
      *
      * @throws NullPointerException if item is {@code null}
      */
-    public boolean next(E item) {
+    public boolean next(final E item) {
         Objects.requireNonNull(item, NO_NULL);
 
         boolean rtn = false;
@@ -427,7 +471,7 @@ public class LinkedList<E extends Comparable<E>> {
      *
      * @throws NullPointerException if item is {@code null}
      */
-    public void push(E item) {
+    public void push(final E item) {
         Node<E> node = new Node<>(Objects.requireNonNull(item, NO_NULL));
 
         // Is the list empty?
@@ -439,7 +483,13 @@ public class LinkedList<E extends Comparable<E>> {
             current = node;
         } else
         {
-            // No - add node to top of chain
+            // Check for disallowed duplicates
+            if (foundDisallowedDuplicate(item))
+            {
+                return;
+            }
+
+            // Add node to tail of chain
             node.next = first;
             first.previous = node;
             first = node;
@@ -497,8 +547,39 @@ public class LinkedList<E extends Comparable<E>> {
     }
 
     /**
+     * Check for a duplicate record, if duplicates are not allowed.
+     *
+     * @param item to check for
+     *
+     * @return {@code true } if {@code allowDuplicates } is {@code false } and item is found,
+     *         {@code false } otherwise.
+     */
+    private boolean foundDisallowedDuplicate(final E item) {
+        boolean rtn = false;
+
+        // Are duplicates allowed?
+        if (!allowDuplicates)
+        { // No - store current pointer
+            Node<E> tempNode = current;
+
+            // Does this item exist in the list?
+            if (contains(item))
+            { // Yes
+                rtn = true;
+            }
+
+            // No - reset current pointer
+            current = tempNode;
+        }
+
+        return rtn;
+    }
+
+    /**
      * This class is used by the {@linkplain LinkedList&lt;E&gt;} class to store the items,
      * and then be linked together into a chain.
+     * <p>
+     * This class is a struct alternative.
      *
      * @param <E> the type of element held in this node
      *
@@ -526,7 +607,7 @@ public class LinkedList<E extends Comparable<E>> {
          *
          * @param item the object being stored
          */
-        public Node(E item) {
+        public Node(final E item) {
             this.item = item;
         }
 
