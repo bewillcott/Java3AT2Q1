@@ -9,11 +9,13 @@
     
     <name>Java3 AT2 Question 1</name>
     <description>This application uses a nested class that shows countries with cities inside.
-    These countries are stored in a doubly linked list.</description>
+        These countries are stored in a doubly linked list.</description>
     
     <properties>
-        <jar.manifest.mainClass></jar.manifest.mainClass>
+        <jar.manifest.mainClass>com.bewsoftware.tafe.java3.at2.q1.App</jar.manifest.mainClass>
         <java.version>16</java.version>
+        <javafx.version>16</javafx.version>
+        <junit.version>5.8.0-M1</junit.version>
         <source.encoding>UTF-8</source.encoding>
         <javadoc.source.version>${java.version}</javadoc.source.version>
         <jdk.version>${java.version}</jdk.version>
@@ -25,8 +27,7 @@
         <javadoc.reporting.outputDirectory>${project.reporting.outputDirectory}/apidocs</javadoc.reporting.outputDirectory>
         <skip.unit.tests>true</skip.unit.tests>
     </properties>
-    
-    
+        
     <developers>
         <developer>
             <id>bewillcott</id>
@@ -61,8 +62,237 @@
         </license>
     </licenses>
     
+    <dependencies>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    
+    <profiles>
+        <profile>
+            <id>release-profile</id>            
+            <properties>
+                <finalBaseName>${project.build.finalName}</finalBaseName>
+            </properties>
+            <build>
+                <plugins>                     
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <configuration>
+                            <encoding>${source.encoding}</encoding>
+                        </configuration>
+                        <executions>
+                            <execution>                        
+                                <id>Copy-Manual-to-basedir</id>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <phase>prepare-package</phase>
+                                <configuration>
+                                    <outputDirectory>docs</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>
+                                                ${docs.target}
+                                            </directory>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+  
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>Zip Binary Jar and libs</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>zip</executable>
+                                    <workingDirectory>${project.build.directory}</workingDirectory>
+                                    <includeProjectDependencies>false</includeProjectDependencies>
+                                    <includePluginDependencies>true</includePluginDependencies>
+                                    <arguments>
+                                        <argument>-r</argument>
+                                        <argument>${finalBaseName}.zip</argument>
+                                        <argument>${finalBaseName}.jar</argument>
+                                        <argument>libs</argument>
+                                    </arguments> 
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-install-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>manual</id>                                    
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                                <configuration>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>${project.artifactId}</artifactId>
+                                    <version>${project.artifact.version}</version>
+                                    <classifier>manual</classifier>
+                                    <packaging>jar</packaging>
+                                    <file>${project.build.directory}/${finalBaseName}-manual.jar</file>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>manual-src</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                                <configuration>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>${project.artifactId}</artifactId>
+                                    <version>${project.artifact.version}</version>
+                                    <classifier>manual-src</classifier>
+                                    <packaging>jar</packaging>
+                                    <file>${project.build.directory}/${finalBaseName}-manual-src.jar</file>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>  
+                            
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>    
+      
+                    <plugin>                
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-site-plugin</artifactId>
+                        <configuration>
+                            <locales>en</locales>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <id>site-jar</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>       
+                    </plugin>         
+                </plugins>
+            </build>
+        </profile>
+        
+        <profile>
+            <id>test</id>
+            <properties>
+                <skip.unit.tests>false</skip.unit.tests>
+            </properties>
+        </profile>
+    </profiles>
+
+
     <build>
+        <resources>
+            <resource>
+                <directory>
+                    images
+                </directory>
+                <excludes>
+                    <exclude>
+                        **/*
+                    </exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>
+                    src/main/resources
+                </directory>
+                <includes>
+                    <include>
+                        **/*
+                    </include>
+                </includes>
+            </resource>
+        </resources>
+
         <plugins>               
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <!-- Default configuration for running -->
+                        <!-- Usage: mvn clean javafx:run -->
+                        <id>default-cli</id>
+                        <configuration>
+                            <mainClass>${jar.manifest.mainClass}</mainClass>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <!-- Configuration for manual attach debugging -->
+                        <!-- Usage: mvn clean javafx:run@debug -->
+                        <id>debug</id>
+                        <configuration>
+                            <options>
+                                <option>-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=localhost:8000</option>
+                            </options>
+                            <mainClass>${jar.manifest.mainClass}</mainClass>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <!-- Configuration for automatic IDE debugging -->
+                        <id>ide-debug</id>
+                        <configuration>
+                            <options>
+                                <option>-agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address}</option>
+                            </options>
+                            <mainClass>${jar.manifest.mainClass}</mainClass>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <!--================== Maven JavaDoc ==================-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -150,11 +380,23 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <configuration>
-                    <locales>en</locales>
-                </configuration>
-            </plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeScope>compile</includeScope>
+                            <outputDirectory>
+                                ${project.build.directory}/libs
+                            </outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>  
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -162,7 +404,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <!--<classpathPrefix>libs/</classpathPrefix>-->
+                            <classpathPrefix>libs/</classpathPrefix>
                             <mainClass>${jar.manifest.mainClass}</mainClass>
                             <addBuildEnvironmentEntries>true</addBuildEnvironmentEntries>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
@@ -299,26 +541,48 @@
             </plugins>
         </pluginManagement>
     </build>
-    <dependencies>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.6.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-params</artifactId>
-            <version>5.6.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.6.0</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-graphics</artifactId>
+                <version>${javafx.version}</version>
+                <type>jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-controls</artifactId>
+                <version>${javafx.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-fxml</artifactId>
+                <version>${javafx.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-params</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-engine</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.platform</groupId>
+                <artifactId>junit-platform-surefire-provider</artifactId>
+                <version>${junit.platform.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    
     <reporting>
         <plugins>
             <plugin>

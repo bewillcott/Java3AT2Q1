@@ -33,5 +33,11 @@
  * @version 1.0
  */
 module Java3AT2Q1 {
-//    exports com.bewsoftware.tafe.java3.at2.q1;
+    requires javafx.controls;
+    requires javafx.fxml;
+    requires transitive javafx.graphics;
+    requires javafx.base;
+
+    opens com.bewsoftware.tafe.java3.at2.q1 to javafx.fxml;
+    exports com.bewsoftware.tafe.java3.at2.q1;
 }

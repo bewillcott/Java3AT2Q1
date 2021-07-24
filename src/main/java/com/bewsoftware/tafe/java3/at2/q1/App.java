@@ -1,5 +1,5 @@
 /*
- *  File Name:    Main.java
+ *  File Name:    App.java
  *  Project Name: Java3AT2Q1
  *
  *  Copyright (c) 2021 Bradley Willcott
@@ -20,27 +20,59 @@
  * ****************************************************************
  * Name: Bradley Willcott
  * ID:   M198449
- * Date: 22 July 2021
+ * Date: 24 July 2021
  * ****************************************************************
  */
 package com.bewsoftware.tafe.java3.at2.q1;
 
-import com.bewsoftware.tafe.java3.at2.q1.utils.LinkedList;
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 /**
- * This class is the application entry point.
+ * The is the application entry point.
  *
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 1.0
  * @version 1.0
  */
-public class Main {
+public class App extends Application {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        LinkedList<Country> countries = new LinkedList<>();
+        launch(args);
     }
+
+    /**
+     * Default constructor.
+     */
+    public App() {
+        // Nothing to do.
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+        Button btn = new Button();
+        btn.setText("Say 'Hello World'");
+        btn.setOnAction((ActionEvent event) ->
+        {
+            System.out.println("Hello World!");
+        });
+
+        StackPane root = new StackPane();
+        root.getChildren().add(btn);
+
+        Scene scene = new Scene(root, 300, 250);
+
+        primaryStage.setTitle("Hello World!");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
 }

@@ -23,7 +23,7 @@
  * Date: 22 July 2021
  * ****************************************************************
  */
-package com.bewsoftware.tafe.java3.at2.q1;
+package com.bewsoftware.tafe.java3.at2.q1.classes;
 
 import java.util.Objects;
 import java.util.SortedSet;

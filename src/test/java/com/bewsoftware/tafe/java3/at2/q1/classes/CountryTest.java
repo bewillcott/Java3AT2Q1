@@ -23,9 +23,9 @@
  * Date: 24 July 2021
  * ****************************************************************
  */
-package com.bewsoftware.tafe.java3.at2.q1;
+package com.bewsoftware.tafe.java3.at2.q1.classes;
 
-import com.bewsoftware.tafe.java3.at2.q1.Country.City;
+import com.bewsoftware.tafe.java3.at2.q1.classes.Country.City;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
