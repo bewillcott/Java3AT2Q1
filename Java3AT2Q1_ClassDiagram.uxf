@@ -1,0 +1,623 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>6</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>504</x>
+      <y>0</y>
+      <w>186</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>valign=center
+halign=center
+fontsize=16
+lw=2
+
+*Java3 AT2 Q1*
+v1.0
+
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>732</x>
+      <y>42</y>
+      <w>102</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>valign=center
+
+Copyright © 2021
+-
+Name: Bradley Willcott
+ID:   M198449
+Date: 28 July 2021
+
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>318</x>
+      <y>120</y>
+      <w>162</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>bg=green
+transparency=0
+layer=1
+App
+--
+-countries : LinkedList&lt;Country&gt;
+-fxmlLoader : FAXMLoader
+-scane : Scene
+
+--
++App()
+
++main(args : String[]) : void
++start(primaryStage : Stage) : void
++stop() : void
+
+group=7</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>300</x>
+      <y>96</y>
+      <w>198</w>
+      <h>138</h>
+    </coordinates>
+    <panel_attributes>com.bewsoftware.tafe.java3.at2.q1
+--
+bg=orange
+group=7</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>318</x>
+      <y>282</y>
+      <w>234</w>
+      <h>336</h>
+    </coordinates>
+    <panel_attributes>bg=green
+transparency=0
+layer=1
+Country
+--
+-cities : SortedList&lt;City&gt;
+-name : String
+
+--
++Country()
++Country(name : String)
+
++addCity(city : String) : boolean
++addCity(city : String, population : int) : boolean
++compareTo(o : Country) : int
++equals(obj : Object) : boolean
++getCities() : City[]
++getCity(name : string) : City
++getName() : String
++getNumberOfCities() : int
++hashCode() : int
++iterator() : Iterator&lt;City&gt;
++readExternal(in : ObjectInput) : void
++size() : int
++ToString() : String
++writeExternal(out : ObjectOutput) : void
+
+{innerclass
+City
+--
+-name : String
+-population : int
+
+--
++City()
++City(name : String)
++City(name : String, population : int)
+
++compareTo(o : City) : int
++equals(obj : Object) : boolean
++getName() : String
++getPopulation() : int
++hashCode() : int
++readExternal(in : ObjectInput) : void
++setPopulation(value : int) : void
++toString() : String
++writeExternal(out : ObjectOutput) : void
+innerclass}
+
+
+group=4</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>300</x>
+      <y>258</y>
+      <w>270</w>
+      <h>378</h>
+    </coordinates>
+    <panel_attributes>com.bewsoftware.tafe.java3.at2.q1.classes
+--
+bg=orange
+group=4</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>402</x>
+      <y>702</y>
+      <w>204</w>
+      <h>390</h>
+    </coordinates>
+    <panel_attributes>bg=green
+transparency=0
+layer=1
+LinkedList
+&lt;E extends Comparable&lt;E&gt;&gt;
+implements Externalizable, Iterable&lt;E&gt;
+--
+-allowDuplicates : boolean
+-current : Node&lt;E&gt;
+-first : Node&lt;E&gt;
+-last : Node&lt;E&gt;
+-size : int
+
+--
++LinkedList()
++LinkedList(allowDuplicates : boolean)
+
++add(item : E) : boolean
++clear() : void
++contains(item : E) : boolean
++first() : E
++get(item : E) : E
++hasNext() : boolean
++insert(item : E) : boolean
++insertAfter(item : E) : boolean
++isAllowDuplicates() : boolean
++iterator() : Iterator&lt;E&gt;
++last() : E
++next(item : E) : boolean
++next() : E
++pop() : E
++prev() : E
++pull() : E
++push(item : E) : boolean
++readExternal(in ObjectInput) : void
++remove() : E
++size() : int
++toString() : String
++writeExternal(out : ObjectOutput) : void
+
+
+
+{innerclass
+Node
+&lt;E&gt;
+--
++item : E
++next : Node&lt;E&gt;
++previous : Node&lt;E&gt;
+
+--
++Node(item : E)
+
++toString() : String
+innerclass}
+
+
+group=5</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>384</x>
+      <y>678</y>
+      <w>528</w>
+      <h>432</h>
+    </coordinates>
+    <panel_attributes>com.bewsoftware.tafe.java3.at2.q1.utils
+--
+bg=orange
+group=5</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>624</x>
+      <y>702</y>
+      <w>270</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>bg=green
+transparency=0
+layer=1
+Helper
+--
+
+--
++tryarseInt(value : String, rtnVal : Ref&lt;Integer&gt;) : boolean 
+
+
+group=5</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>708</x>
+      <y>792</y>
+      <w>54</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>bg=green
+transparency=0
+layer=1
+Ref
+&lt;T&gt;
+--
++val : T
+
+--
+
+
+group=5</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>708</x>
+      <y>870</y>
+      <w>186</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>bg=green
+transparency=0
+layer=1
+Serialization
+--
+
+--
++read(t : T, filename : String) : T
++write(t : T, filename : String) : void
+
+
+group=5</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>624</x>
+      <y>114</y>
+      <w>288</w>
+      <h>504</h>
+    </coordinates>
+    <panel_attributes>com.bewsoftware.tafe.java3.at2.q1.gui
+--
+bg=orange
+group=6</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>642</x>
+      <y>138</y>
+      <w>252</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>bg=green
+transparency=0
+layer=1
+Dialogs
+--
+--
++displayMessage(title : String, message : String) : void
+
+
+group=6</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>642</x>
+      <y>186</y>
+      <w>252</w>
+      <h>414</h>
+    </coordinates>
+    <panel_attributes>bg=green
+transparency=0
+layer=1
+MainWindowController
+--
+-btnAddCity : Button
+-buttonData : ButtonStruct
+-cityData : CityStruct
+-countryData : CountryStruct
+-ivAddCity : ImageView
+-ivAddCountry : ImageView
+-lblPopVal : Label
+-lvCities : ListView&lt;String&gt;
+-lvCountries : ListView&lt;String&gt;
+-txtCity : TextField
+-txtCountry : TextField
+-txtPopulation : TextField
+
+--
++setCountries(countries : LinkedList&lt;Country&gt;) : void
+
+-btnAddCityClick(event ActionEvent) : void
+-btnAddCountryClick(event ActionEvent) : void
+-initialize() : void
+-updateLvCities() : void
+-updateLvCountries() : void
+
+{innerclass
+ButtonStruct
+--
++BLUE_PLUS_ICON : String
++ACCEPT : String
++ADD : String
++GREEN_ACCEPT_ICON : String
++bluePlus : Image
++greenAccept : Image
+
+--
+
+innerclass}
+
+{innerclass
+CityStruct
+--
++oList : ObservableList&lt;String&gt;
++selected : City
++selection : MultipleSelectionModel&lt;String&gt;
+
+--
+
+innerclass}
+
+{innerclass
+CountryStruct
+--
++lList : LinkedList&lt;Country&gt;
++oList : ObservableList&lt;String&gt;
++selected : Country
++selection : MultipleSelectionModel&lt;String&gt;
+
+--
+
+innerclass}
+
+
+group=6</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>600</x>
+      <y>798</y>
+      <w>120</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+layer=2
+m1=1
+m2=0..*
+
+
+
+group=5</panel_attributes>
+    <additional_attributes>10.0;20.0;180.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>588</x>
+      <y>276</y>
+      <w>66</w>
+      <h>156</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+layer=2
+m1=1
+m2=1
+
+
+group=6</panel_attributes>
+    <additional_attributes>90.0;10.0;10.0;10.0;10.0;230.0;90.0;230.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>600</x>
+      <y>882</y>
+      <w>120</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+layer=2
+
+group=5</panel_attributes>
+    <additional_attributes>180.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>600</x>
+      <y>738</y>
+      <w>114</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+layer=2
+
+group=5</panel_attributes>
+    <additional_attributes>170.0;10.0;170.0;50.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>600</x>
+      <y>954</y>
+      <w>102</w>
+      <h>102</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+nodes in
+chain
+m1=1
+m2=0..*
+r1=-first
+layer=2
+
+
+group=5</panel_attributes>
+    <additional_attributes>10.0;20.0;90.0;20.0;90.0;140.0;10.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>222</x>
+      <y>150</y>
+      <w>192</w>
+      <h>612</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=1
+r1=-countries
+layer=2
+</panel_attributes>
+    <additional_attributes>160.0;20.0;10.0;20.0;10.0;990.0;300.0;990.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>246</x>
+      <y>186</y>
+      <w>84</w>
+      <h>138</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=0..*
+r1=-countries
+layer=2
+
+</panel_attributes>
+    <additional_attributes>120.0;20.0;10.0;20.0;10.0;200.0;120.0;200.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>246</x>
+      <y>426</y>
+      <w>84</w>
+      <h>102</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=0..*
+r1=-cities
+layer=2
+
+group=4</panel_attributes>
+    <additional_attributes>120.0;20.0;10.0;20.0;10.0;140.0;120.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>474</x>
+      <y>144</y>
+      <w>180</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+layer=2
+</panel_attributes>
+    <additional_attributes>280.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>588</x>
+      <y>150</y>
+      <w>66</w>
+      <h>102</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+layer=2
+
+group=6</panel_attributes>
+    <additional_attributes>90.0;10.0;10.0;10.0;10.0;150.0;90.0;150.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>888</x>
+      <y>342</y>
+      <w>72</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+layer=2
+m1=1
+m2=1
+
+
+group=6</panel_attributes>
+    <additional_attributes>10.0;10.0;100.0;10.0;100.0;250.0;10.0;250.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>888</x>
+      <y>306</y>
+      <w>90</w>
+      <h>276</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+layer=2
+m1=1
+m2=1
+
+
+group=6</panel_attributes>
+    <additional_attributes>10.0;10.0;130.0;10.0;130.0;430.0;10.0;430.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>588</x>
+      <y>534</y>
+      <w>66</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=-
+layer=2
+r2=+lList
+</panel_attributes>
+    <additional_attributes>10.0;280.0;10.0;20.0;90.0;20.0</additional_attributes>
+  </element>
+</diagram>

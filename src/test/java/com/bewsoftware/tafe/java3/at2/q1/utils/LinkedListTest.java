@@ -25,8 +25,13 @@
  */
 package com.bewsoftware.tafe.java3.at2.q1.utils;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import org.junit.jupiter.api.*;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -49,6 +54,11 @@ public class LinkedListTest {
         "Fred Smith", "Peter Rand", "Anne Davidson", "Howard Hughes",
         "River Stone", "Margaret Thatcher", "Neville Young", "Jenny Rose"
     };
+
+    /**
+     * Filename used to test serialization.
+     */
+    private static final String TEST_FILENAME = "linkedlist.dat";
 
     /**
      * Globally accessible linked list.
@@ -85,12 +95,12 @@ public class LinkedListTest {
     public void setUp() {
         for (int i = 0; i < 4; i++)
         {
-            linkedList.append(NAMES[i]);
+            linkedList.add(NAMES[i]);
         }
 
         for (int i = 0; i < 4; i++)
         {
-            linkedList2.append(NAMES[i]);
+            linkedList2.add(NAMES[i]);
         }
     }
 
@@ -101,37 +111,37 @@ public class LinkedListTest {
     }
 
     /**
-     * Test of append method, of class LinkedList.
+     * Test of add method, of class LinkedList.
      */
     @Test
-    public void testAppend() {
+    public void testAdd() {
         int count = linkedList.size();
 
-        linkedList.append(NAMES[5]);
+        linkedList.add(NAMES[5]);
         assertEquals(count + 1, linkedList.size(),
                      "linkedList - Internal count is wrong: " + count + 1 + " ~ " + linkedList.size());
 
         count = linkedList2.size();
 
-        linkedList2.append(NAMES[5]);
+        linkedList2.add(NAMES[5]);
         assertEquals(count + 1, linkedList2.size(),
                      "linkedList2 - Internal count is wrong: " + count + 1 + " ~ " + linkedList2.size());
     }
 
     /**
-     * Test of append method, of class LinkedList.
+     * Test of add method, of class LinkedList.
      */
     @Test
     public void testAppendDuplicate() {
         int count = linkedList.size();
 
-        linkedList.append(NAMES[1]);
+        linkedList.add(NAMES[1]);
         assertEquals(count + 1, linkedList.size(),
                      "linkedList - Internal count is wrong: " + count + 1 + " ~ " + linkedList.size());
 
         count = linkedList2.size();
 
-        linkedList2.append(NAMES[1]);
+        linkedList2.add(NAMES[1]);
         assertEquals(count, linkedList2.size(),
                      "linkedList2 - Internal count is wrong: " + count + " ~ " + linkedList2.size());
     }
@@ -165,12 +175,12 @@ public class LinkedListTest {
     @Test
     public void testDuplicateSize() {
         int count = linkedList.size();
-        linkedList.append(NAMES[1]);
+        linkedList.add(NAMES[1]);
         assertEquals(count + 1, linkedList.size(),
                      "linkedList - Internal count is wrong: " + (count + 1) + " ~ " + linkedList.size());
 
         count = linkedList2.size();
-        linkedList2.append(NAMES[1]);
+        linkedList2.add(NAMES[1]);
         assertEquals(count, linkedList2.size(),
                      "linkedList2 - Internal count is wrong: " + count + " ~ " + linkedList2.size());
     }
@@ -294,11 +304,11 @@ public class LinkedListTest {
      */
     @Test
     public void testNext_GenericType() {
-        linkedList.append(NAMES[1]);
+        linkedList.add(NAMES[1]);
         linkedList.contains(NAMES[1]);
         assertTrue(linkedList.next(NAMES[1]), "linkedList - Couldn't find second record");
 
-        linkedList2.append(NAMES[1]);
+        linkedList2.add(NAMES[1]);
         linkedList2.contains(NAMES[1]);
         assertTrue(linkedList2.next(NAMES[1]), "linkedList2 - Couldn't find second record");
     }
@@ -396,7 +406,7 @@ public class LinkedListTest {
     @Test
     public void testRemoveWithDuplicate() {
         int count = linkedList.size();
-        linkedList.append(NAMES[2]);
+        linkedList.add(NAMES[2]);
         linkedList.contains(NAMES[2]);
         String item = linkedList.remove();
         assertNotNull(item, "linkedList - remove returned null");
@@ -404,7 +414,7 @@ public class LinkedListTest {
                      "linkedList - Internal count is wrong: " + count + " ~ " + linkedList.size());
 
         count = linkedList2.size();
-        linkedList2.append(NAMES[2]);
+        linkedList2.add(NAMES[2]);
         linkedList2.contains(NAMES[2]);
         item = linkedList2.remove();
         assertNotNull(item, "linkedList2 - remove returned null");
@@ -413,17 +423,42 @@ public class LinkedListTest {
     }
 
     /**
+     * Test of readExternal and writeExternal methods, of class Country.
+     */
+    @Test
+    public void testSerialization() {
+
+        assertDoesNotThrow(() ->
+        {
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(TEST_FILENAME)))
+            {
+                oos.writeObject(linkedList);
+            }
+        }, "Failed to serialize linkedList");
+
+        assertDoesNotThrow(() ->
+        {
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(TEST_FILENAME)))
+            {
+                @SuppressWarnings("unchecked")
+                LinkedList<String> list = (LinkedList<String>) ois.readObject();
+                System.out.println(list);
+            }
+        }, "Failed to deserialize linkedList");
+    }
+
+    /**
      * Test of size method, of class LinkedList.
      */
     @Test
     public void testSize() {
         int count = linkedList.size();
-        linkedList.append(NAMES[7]);
+        linkedList.add(NAMES[7]);
         assertEquals(count + 1, linkedList.size(),
                      "linkedList - Internal count is wrong: " + (count + 1) + " ~ " + linkedList.size());
 
         count = linkedList2.size();
-        linkedList2.append(NAMES[7]);
+        linkedList2.add(NAMES[7]);
         assertEquals(count + 1, linkedList2.size(),
                      "linkedList2 - Internal count is wrong: " + (count + 1) + " ~ " + linkedList2.size());
     }

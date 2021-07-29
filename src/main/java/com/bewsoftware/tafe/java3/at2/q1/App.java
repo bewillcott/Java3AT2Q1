@@ -25,11 +25,17 @@
  */
 package com.bewsoftware.tafe.java3.at2.q1;
 
+import com.bewsoftware.tafe.java3.at2.q1.classes.Country;
+import com.bewsoftware.tafe.java3.at2.q1.gui.Dialogs;
+import com.bewsoftware.tafe.java3.at2.q1.gui.MainWindowController;
+import com.bewsoftware.tafe.java3.at2.q1.utils.LinkedList;
+import com.bewsoftware.tafe.java3.at2.q1.utils.Serialization;
+import java.io.IOException;
+import java.net.URL;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /**
@@ -43,11 +49,32 @@ import javafx.stage.Stage;
 public class App extends Application {
 
     /**
+     * Filename of serialized data.
+     * <p>
+     * This is the Country stored data.
+     */
+    private static final String DATA_FILENAME = "Java3AT2Q1.dat";
+
+    /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         launch(args);
     }
+    /**
+     * Linked list containing all the countries.
+     */
+    private LinkedList<Country> countries;
+
+    /**
+     * The FXML Loader instance.
+     */
+    private FXMLLoader fxmlLoader;
+
+    /**
+     * The Scene instance.
+     */
+    private Scene scene;
 
     /**
      * Default constructor.
@@ -57,22 +84,59 @@ public class App extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) {
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction((ActionEvent event) ->
+    public void start(Stage primaryStage) throws IOException, ClassNotFoundException {
+        countries = new LinkedList<>(false);
+
+        try
         {
-            System.out.println("Hello World!");
+            countries = Serialization.read(countries, DATA_FILENAME);
+
+        } catch (IOException | ClassNotFoundException e)
+        {
+            Dialogs.displayMessage("Loading data file", "The data was found to be corrupted.\n"
+                                                        + "Unable to read in.");
+        }
+
+        System.out.println("Adding Canada: " + countries.add(new Country("Canada")));
+        System.out.println("Adding Australia: " + countries.add(new Country("Australia")));
+        System.out.println("Adding Asia Minor: " + countries.add(new Country("Asia Minor")));
+
+        scene = new Scene(loadFXML("/fxml/MainWindow"), 450, 300);
+
+        scene.getStylesheets().forEach((String t) ->
+        {
+            System.out.println("css: " + t);
         });
 
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
+        MainWindowController mwc = fxmlLoader.getController();
+        mwc.setCountries(countries);
 
-        Scene scene = new Scene(root, 300, 250);
-
-        primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        System.out.println("App is stopping.");
+        System.out.println("countries: " + countries.size());
+        Serialization.write(countries, DATA_FILENAME);
+    }
+
+    /**
+     * Find and load an fxml file.
+     *
+     * @param fxml name of file to load
+     *
+     * @return the loaded object hierarchy
+     *
+     * @throws IOException if any
+     */
+    private Parent loadFXML(String fxml) throws IOException {
+        URL url = App.class.getResource(fxml + ".fxml");
+        System.out.println("url: " + url);
+        fxmlLoader = new FXMLLoader(url);
+        return fxmlLoader.load();
     }
 
 }

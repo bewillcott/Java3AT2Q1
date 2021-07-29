@@ -1,5 +1,5 @@
 /*
- *  File Name:    module-info.java
+ *  File Name:    Helper.java
  *  Project Name: Java3AT2Q1
  *
  *  Copyright (c) 2021 Bradley Willcott
@@ -20,31 +20,47 @@
  * ****************************************************************
  * Name: Bradley Willcott
  * ID:   M198449
- * Date: 22 July 2021
+ * Date: 27 July 2021
  * ****************************************************************
  */
+package com.bewsoftware.tafe.java3.at2.q1.utils;
 
 /**
- * This module contains the files required to develop and run the program associated
- * with this project: Java3 AT2 Q1.
+ * Contains a helper method.
  *
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 1.0
  * @version 1.0
  */
-module Java3AT2Q1 {
-    requires javafx.controls;
-    requires javafx.fxml;
-    requires transitive javafx.graphics;
+public class Helper {
 
-    opens com.bewsoftware.tafe.java3.at2.q1.gui to javafx.fxml;
-    exports com.bewsoftware.tafe.java3.at2.q1;
+    /**
+     * Process a string trying to parse it into an int.
+     *
+     * @param value  string to parse
+     * @param rtnVal struct to hold the parsed int
+     *
+     * @return {@code true } if successful, {@code false } otherwise
+     */
+    public static boolean tryParseInt(final String value, Ref<Integer> rtnVal) {
+        boolean rtn = false;
 
-    // These packages are exported to allow the Javadoc program to
-    // process them and produce Project Level API documentation,
-    // instead of the ussual external Developer Level API documentation.
-    exports com.bewsoftware.tafe.java3.at2.q1.classes;
-    exports com.bewsoftware.tafe.java3.at2.q1.gui;
-    exports com.bewsoftware.tafe.java3.at2.q1.utils;
+        try
+        {
+            rtnVal.val = Integer.parseInt(value);
+            rtn = true;
+        } catch (NumberFormatException e)
+        {
+            // Ignore it
+        }
+
+        return rtn;
+    }
+
+    /**
+     * Not meant to be instantiated.
+     */
+    private Helper() {
+    }
 }

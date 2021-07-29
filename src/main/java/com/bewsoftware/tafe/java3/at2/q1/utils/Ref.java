@@ -1,5 +1,5 @@
 /*
- *  File Name:    module-info.java
+ *  File Name:    Ref.java
  *  Project Name: Java3AT2Q1
  *
  *  Copyright (c) 2021 Bradley Willcott
@@ -20,31 +20,33 @@
  * ****************************************************************
  * Name: Bradley Willcott
  * ID:   M198449
- * Date: 22 July 2021
+ * Date: 26 July 2021
  * ****************************************************************
  */
+package com.bewsoftware.tafe.java3.at2.q1.utils;
 
 /**
- * This module contains the files required to develop and run the program associated
- * with this project: Java3 AT2 Q1.
+ * This is a struct used to pass another object into a method and/or return a
+ * different/new object of that type.Similar to the {@code out }keyword in C#.
+ *
+ * @param <T> the type of the object being 'referenced'
  *
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 1.0
  * @version 1.0
  */
-module Java3AT2Q1 {
-    requires javafx.controls;
-    requires javafx.fxml;
-    requires transitive javafx.graphics;
+public class Ref<T> {
 
-    opens com.bewsoftware.tafe.java3.at2.q1.gui to javafx.fxml;
-    exports com.bewsoftware.tafe.java3.at2.q1;
+    /**
+     * Default constructor.
+     */
+    public Ref() {
+        // Nothing to do.
+    }
 
-    // These packages are exported to allow the Javadoc program to
-    // process them and produce Project Level API documentation,
-    // instead of the ussual external Developer Level API documentation.
-    exports com.bewsoftware.tafe.java3.at2.q1.classes;
-    exports com.bewsoftware.tafe.java3.at2.q1.gui;
-    exports com.bewsoftware.tafe.java3.at2.q1.utils;
+    /**
+     *
+     */
+    public T val;
 }

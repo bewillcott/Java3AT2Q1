@@ -25,6 +25,11 @@
  */
 package com.bewsoftware.tafe.java3.at2.q1.utils;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.util.Iterator;
 import java.util.Objects;
 
 /**
@@ -45,7 +50,12 @@ import java.util.Objects;
  * @since 1.0
  * @version 1.0
  */
-public class LinkedList<E extends Comparable<E>> {
+public class LinkedList<E extends Comparable<E>> implements Externalizable, Iterable<E> {
+
+    /**
+     * Error message text.
+     */
+    private static final String DATA_ITEGRITY_FAILED = "data integrity failed.";
 
     /**
      * Error message to go with {@link NullPointerException}
@@ -53,31 +63,36 @@ public class LinkedList<E extends Comparable<E>> {
     private static final String NO_NULL = "This implementation does not allow {@code null} items to be added.";
 
     /**
+     * Used by serialization process.
+     */
+    private static final long serialVersionUID = 4263265852224464064L;
+
+    /**
      * Are duplicate items allowed in this instance of {@linkplain LinkedList }?
      * <p>
      * @note Once set at instantiation, it cannot be changed.
      */
-    public final boolean allowDuplicates;
+    private boolean allowDuplicates;
 
     /**
      * The node that was last retrieved by one of the traversal methods.
      */
-    private Node<E> current;
+    private transient Node<E> current;
 
     /**
      * The first node in the chain.
      */
-    private Node<E> first;
+    private transient Node<E> first;
 
     /**
      * The last node in the chain.
      */
-    private Node<E> last;
+    private transient Node<E> last;
 
     /**
      * The number of nodes/items in the chain.
      */
-    private int size = 0;
+    private transient int size = 0;
 
     /**
      * Instantiate an empty default list object.
@@ -106,9 +121,11 @@ public class LinkedList<E extends Comparable<E>> {
      *
      * @param item to add
      *
+     * @return {@code true } if successful, {@code false } otherwise.
+     *
      * @throws NullPointerException if item is {@code null}
      */
-    public void append(final E item) {
+    public boolean add(final E item) {
         Node<E> node = new Node<>(Objects.requireNonNull(item, NO_NULL));
 
         // Is the list empty?
@@ -123,7 +140,7 @@ public class LinkedList<E extends Comparable<E>> {
             // Check for disallowed duplicates
             if (foundDisallowedDuplicate(item))
             {
-                return;
+                return false;
             }
 
             // Add node to tail of chain
@@ -134,6 +151,7 @@ public class LinkedList<E extends Comparable<E>> {
 
         current = node;
         size++;
+        return true;
     }
 
     /**
@@ -193,6 +211,33 @@ public class LinkedList<E extends Comparable<E>> {
     }
 
     /**
+     * Searches for the first occurrence of the item in the list and returns it.
+     * <p>
+     * If found, this becomes the current reference point in the list.
+     * <p>
+     * <b>Note:</b> This is only useful, if the class used {@literal (<E>) } has an {@code equals(Object) } method
+     * that only checks for a subset of the classes properties. For example, a Country
+     * class that includes a list (internally) of cities. If only the country's {@code name }
+     * property is checked for equality, then using a new Country instance with the required
+     * name set, would would work, returning the internal copy with all the cities.
+     *
+     * @param item to search for
+     *
+     * @return {@code true } if found, {@code false } otherwise
+     *
+     * @throws NullPointerException if item is {@code null}
+     */
+    public E get(final E item) {
+        if (contains(item))
+        {
+            return current.item;
+        } else
+        {
+            return null;
+        }
+    }
+
+    /**
      * Returns {@code true } if there is other item following the current one,
      * {@code false } otherwise.
      *
@@ -211,14 +256,16 @@ public class LinkedList<E extends Comparable<E>> {
      *
      * @param item to be inserted
      *
+     * @return {@code true } if successful, {@code false } otherwise.
+     *
      * @throws NullPointerException if item is {@code null}
      */
-    public void insert(final E item) {
+    public boolean insert(final E item) {
 
         // Are we out of bounds or pointing at the top?
         if (current == null || current.previous == null)
         { // Yes
-            push(item);
+            return push(item);
 
         } else
         { // No - so we insert it before the current node
@@ -227,7 +274,7 @@ public class LinkedList<E extends Comparable<E>> {
             // Check for disallowed duplicates
             if (foundDisallowedDuplicate(item))
             {
-                return;
+                return false;
             }
 
             // Add node
@@ -244,6 +291,7 @@ public class LinkedList<E extends Comparable<E>> {
             // point current reference pointer to node
             current = node;
             size++;
+            return true;
         }
     }
 
@@ -255,14 +303,16 @@ public class LinkedList<E extends Comparable<E>> {
      *
      * @param item to be inserted
      *
+     * @return {@code true } if successful, {@code false } otherwise.
+     *
      * @throws NullPointerException if item is {@code null}
      */
-    public void insertAfter(final E item) {
+    public boolean insertAfter(final E item) {
 
         // Are we out of bounds or pointing at the top?
         if (current == null || current.next == null)
         { // Yes
-            append(item);
+            return add(item);
 
         } else
         { // No - so we insert it before the current node
@@ -271,7 +321,7 @@ public class LinkedList<E extends Comparable<E>> {
             // Check for disallowed duplicates
             if (foundDisallowedDuplicate(item))
             {
-                return;
+                return false;
             }
 
             // Add node
@@ -288,7 +338,59 @@ public class LinkedList<E extends Comparable<E>> {
             // point current reference pointer to node
             current = node;
             size++;
+            return true;
         }
+    }
+
+    /**
+     * Are duplicate items allowed in this instance of {@linkplain LinkedList }?
+     * <p>
+     * @note Once set at instantiation, it cannot be changed.
+     * @return the allowDuplicates
+     */
+    public boolean isAllowDuplicates() {
+        return allowDuplicates;
+    }
+
+    @Override
+    public Iterator<E> iterator() {
+        return new Iterator<E>() {
+
+            /**
+             * First time this instance of {@code hasNaext() } was run.
+             */
+            private boolean firstTime = true;
+
+            @Override
+            public boolean hasNext() {
+
+                if (firstTime)
+                {
+                    return (size() > 0);
+
+                } else
+                {
+                    return LinkedList.this.hasNext();
+                }
+            }
+
+            @Override
+            public E next() {
+                if (firstTime)
+                {
+                    firstTime = false;
+                    return first();
+                } else
+                {
+                    return LinkedList.this.next();
+                }
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException("Not supported.");
+            }
+        };
     }
 
     /**
@@ -469,9 +571,11 @@ public class LinkedList<E extends Comparable<E>> {
      *
      * @param item to add.
      *
+     * @return {@code true } if successful, {@code false } otherwise.
+     *
      * @throws NullPointerException if item is {@code null}
      */
-    public void push(final E item) {
+    public boolean push(final E item) {
         Node<E> node = new Node<>(Objects.requireNonNull(item, NO_NULL));
 
         // Is the list empty?
@@ -486,7 +590,7 @@ public class LinkedList<E extends Comparable<E>> {
             // Check for disallowed duplicates
             if (foundDisallowedDuplicate(item))
             {
-                return;
+                return false;
             }
 
             // Add node to tail of chain
@@ -497,6 +601,57 @@ public class LinkedList<E extends Comparable<E>> {
 
         current = node;
         size++;
+        return true;
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        int hashCode;
+        int totalHashCode;
+
+        // process 'allowDuplicates'
+        allowDuplicates = in.readBoolean();
+        hashCode = in.readInt();
+        totalHashCode = hashCode;
+
+        if (Objects.hashCode(allowDuplicates) != hashCode)
+        {
+            throw new IOException(DATA_ITEGRITY_FAILED);
+        }
+
+        // process 'Nodes'
+        int numOfNodes = in.readInt();
+        hashCode = in.readInt();
+        totalHashCode += hashCode;
+
+        if (Objects.hashCode(numOfNodes) != hashCode)
+        {
+            throw new IOException(DATA_ITEGRITY_FAILED);
+        }
+
+        for (int i = 0; i < numOfNodes; i++)
+        {
+            // process 'item'
+            @SuppressWarnings("unchecked")
+            E item = (E) in.readObject();
+            hashCode = in.readInt();
+            totalHashCode += hashCode;
+
+            if (item.hashCode() != hashCode)
+            {
+                throw new IOException(DATA_ITEGRITY_FAILED);
+            }
+
+            add(item);
+        }
+
+        // process 'finish'
+        int thc = in.readInt();
+
+        if (totalHashCode != thc)
+        {
+            throw new IOException(DATA_ITEGRITY_FAILED);
+        }
     }
 
     /**
@@ -543,7 +698,70 @@ public class LinkedList<E extends Comparable<E>> {
 
     @Override
     public String toString() {
-        return "LinkedList{" + "size=" + size + '}';
+        StringBuilder sb = new StringBuilder("LinkedList{\n");
+
+        sb.append("    size = ").append(size).append('\n');
+
+        // process first item in list
+        E item = first();
+
+        if (item != null)
+        {
+            sb.append("    item = ").append(item).append('\n');
+        }
+
+        // process the rest of the list
+        while (hasNext())
+        {
+            item = next();
+            sb.append("    item = ").append(item).append('\n');
+        }
+
+        sb.append("}\n");
+        return sb.toString();
+    }
+
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        int hashCode;
+        int totalHashCode;
+
+        // process 'allowDuplicates'
+        out.writeBoolean(allowDuplicates);
+        hashCode = Objects.hashCode(allowDuplicates);
+        totalHashCode = hashCode;
+        out.writeInt(hashCode);
+
+        // process 'Nodes'
+        int numOfNodes = size;
+        out.writeInt(numOfNodes);
+        hashCode = Objects.hashCode(numOfNodes);
+        totalHashCode += hashCode;
+        out.writeInt(hashCode);
+
+        // process first item in list
+        E item = first();
+
+        if (item != null)
+        {
+            out.writeObject(item);
+            hashCode = item.hashCode();
+            totalHashCode += hashCode;
+            out.writeInt(hashCode);
+        }
+
+        // process the rest of the list
+        while (hasNext())
+        {
+            E next = next();
+            out.writeObject(next);
+            hashCode = next.hashCode();
+            totalHashCode += hashCode;
+            out.writeInt(hashCode);
+        }
+
+        // finish
+        out.writeInt(totalHashCode);
     }
 
     /**
@@ -576,7 +794,7 @@ public class LinkedList<E extends Comparable<E>> {
     }
 
     /**
-     * This class is used by the {@linkplain LinkedList&lt;E&gt;} class to store the items,
+     * This class is used by the {@linkplain LinkedList LinkedList&lt;E&gt;} class to store the items,
      * and then be linked together into a chain.
      * <p>
      * This class is a struct alternative.
@@ -617,4 +835,5 @@ public class LinkedList<E extends Comparable<E>> {
         }
 
     }
+
 }

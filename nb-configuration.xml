@@ -14,5 +14,9 @@ That way multiple projects can share the same settings (useful for formatting ru
 Any value defined here will override the pom.xml file value but is only applicable to the current project.
 -->
         <netbeans.hint.license>gpl30_for_TAFE</netbeans.hint.license>
+        <netbeans.compile.on.save>none</netbeans.compile.on.save>
     </properties>
+    <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+        <word>fx</word>
+    </spellchecker-wordlist>
 </project-shared-configuration>

@@ -1,0 +1,22 @@
+@startuml
+class com.bewsoftware.tafe.java3.at2.q1.App
+class com.bewsoftware.tafe.java3.at2.q1.classes.Country
+class com.bewsoftware.tafe.java3.at2.q1.classes.Country.City
+class com.bewsoftware.tafe.java3.at2.q1.gui.Dialogs
+class com.bewsoftware.tafe.java3.at2.q1.gui.MainWindowController
+class com.bewsoftware.tafe.java3.at2.q1.utils.Helper
+class com.bewsoftware.tafe.java3.at2.q1.utils.LinkedList
+class com.bewsoftware.tafe.java3.at2.q1.utils.Ref
+class com.bewsoftware.tafe.java3.at2.q1.utils.Serialization
+com.bewsoftware.tafe.java3.at2.q1.App ..> com.bewsoftware.tafe.java3.at2.q1.classes.Country
+com.bewsoftware.tafe.java3.at2.q1.App ..> com.bewsoftware.tafe.java3.at2.q1.gui.Dialogs
+com.bewsoftware.tafe.java3.at2.q1.App ..> com.bewsoftware.tafe.java3.at2.q1.gui.MainWindowController
+com.bewsoftware.tafe.java3.at2.q1.App ..> com.bewsoftware.tafe.java3.at2.q1.utils.LinkedList
+com.bewsoftware.tafe.java3.at2.q1.App ..> com.bewsoftware.tafe.java3.at2.q1.utils.Serialization
+com.bewsoftware.tafe.java3.at2.q1.gui.MainWindowController ..> com.bewsoftware.tafe.java3.at2.q1.classes.Country
+com.bewsoftware.tafe.java3.at2.q1.gui.MainWindowController ..> com.bewsoftware.tafe.java3.at2.q1.classes.Country.City
+com.bewsoftware.tafe.java3.at2.q1.gui.MainWindowController ..> com.bewsoftware.tafe.java3.at2.q1.gui.Dialogs
+com.bewsoftware.tafe.java3.at2.q1.gui.MainWindowController ..> com.bewsoftware.tafe.java3.at2.q1.utils.Helper
+com.bewsoftware.tafe.java3.at2.q1.gui.MainWindowController ..> com.bewsoftware.tafe.java3.at2.q1.utils.LinkedList
+com.bewsoftware.tafe.java3.at2.q1.gui.MainWindowController ..> com.bewsoftware.tafe.java3.at2.q1.utils.Ref
+@enduml

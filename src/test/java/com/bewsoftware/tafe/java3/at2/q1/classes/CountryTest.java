@@ -26,8 +26,13 @@
 package com.bewsoftware.tafe.java3.at2.q1.classes;
 
 import com.bewsoftware.tafe.java3.at2.q1.classes.Country.City;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import org.junit.jupiter.api.*;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -68,6 +73,11 @@ public class CountryTest {
      */
     private static final int NUMBER_OF_CITIES_TO_TEST = 4;
 
+    /**
+     * Filename used to test serialization.
+     */
+    private static final String TEST_FILENAME = "country.dat";
+
     @BeforeAll
     public static void setUpClass() {
     }
@@ -80,6 +90,9 @@ public class CountryTest {
      */
     private Country country;
 
+    /**
+     * Default constructor.
+     */
     public CountryTest() {
     }
 
@@ -227,6 +240,31 @@ public class CountryTest {
         int hashCode = country.hashCode();
         assertEquals(hashCode, new Country(COUNTRY_NAME).hashCode(),
                      "Failed - hashcodes weren't the same for the same country name!");
+    }
+
+    /**
+     * Test of readExternal and writeExternal methods, of class Country.
+     */
+    @Test
+    public void testSerialization() {
+
+        assertDoesNotThrow(() ->
+        {
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(TEST_FILENAME)))
+            {
+                oos.writeObject(country);
+            }
+        }, "Failed to serialize country");
+
+        assertDoesNotThrow(() ->
+        {
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(TEST_FILENAME)))
+            {
+                Country country2 = (Country) ois.readObject();
+            }
+        }, "Failed to deserialize country");
+
+        System.out.println(country);
     }
 
     /**
