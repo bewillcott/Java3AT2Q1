@@ -55,6 +55,8 @@ public class App extends Application {
      */
     private static final String DATA_FILENAME = "Java3AT2Q1.dat";
 
+    private static final String APP_TITLE = "Java3 AT2 Question 1";
+
     /**
      * @param args the command line arguments
      */
@@ -102,6 +104,8 @@ public class App extends Application {
         mwc.setCountries(countries);
 
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
+        primaryStage.setTitle(APP_TITLE);
         primaryStage.show();
     }
 
