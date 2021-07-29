@@ -194,6 +194,16 @@
                     </exclude>
                 </excludes>
             </resource>
+            <resource>
+                <directory>
+                    src/main/resources
+                </directory>
+                <includes>
+                    <include>
+                        **/*
+                    </include>
+                </includes>
+            </resource>
         </resources>
 
         <plugins>               
@@ -318,6 +328,14 @@
                         <arg>-Xlint:all</arg>
                     </compilerArgs>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <!--                <configuration>
+                    <resources>
+                    </resources>
+                </configuration>-->
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

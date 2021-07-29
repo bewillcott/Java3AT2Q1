@@ -93,21 +93,11 @@ public class App extends Application {
 
         } catch (IOException | ClassNotFoundException e)
         {
-            Dialogs.displayMessage("Loading data file", "The data was found to be corrupted.\n"
-                                                        + "Unable to read in.");
+            Dialogs.displayMessage("Loading data file",
+                                   "The data was found to be corrupted.\nUnable to read in.");
         }
 
-        System.out.println("Adding Canada: " + countries.add(new Country("Canada")));
-        System.out.println("Adding Australia: " + countries.add(new Country("Australia")));
-        System.out.println("Adding Asia Minor: " + countries.add(new Country("Asia Minor")));
-
         scene = new Scene(loadFXML("/fxml/MainWindow"), 450, 300);
-
-        scene.getStylesheets().forEach((String t) ->
-        {
-            System.out.println("css: " + t);
-        });
-
         MainWindowController mwc = fxmlLoader.getController();
         mwc.setCountries(countries);
 
@@ -118,8 +108,6 @@ public class App extends Application {
     @Override
     public void stop() throws Exception {
         super.stop();
-        System.out.println("App is stopping.");
-        System.out.println("countries: " + countries.size());
         Serialization.write(countries, DATA_FILENAME);
     }
 
@@ -134,7 +122,6 @@ public class App extends Application {
      */
     private Parent loadFXML(String fxml) throws IOException {
         URL url = App.class.getResource(fxml + ".fxml");
-        System.out.println("url: " + url);
         fxmlLoader = new FXMLLoader(url);
         return fxmlLoader.load();
     }

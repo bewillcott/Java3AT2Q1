@@ -26,10 +26,7 @@
 package com.bewsoftware.tafe.java3.at2.q1.classes;
 
 import com.bewsoftware.tafe.java3.at2.q1.classes.Country.City;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -84,7 +81,15 @@ public class CountryTest {
 
     @AfterAll
     public static void tearDownClass() {
+
+        File file = new File(TEST_FILENAME);
+
+        if (file.exists())
+        {
+            file.delete();
+        }
     }
+
     /**
      * Globally accessible Country.
      */
